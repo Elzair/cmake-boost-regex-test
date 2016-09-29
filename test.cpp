@@ -1,177 +1,67 @@
 /*
  *
- * Copyright (c) 2004
+ * Copyright (c) 1998-2002
  * John Maddock
  *
- * Use, modification and distribution are subject to the
- * Boost Software License, Version 1.0. (See accompanying file
+ * Use, modification and distribution are subject to the 
+ * Boost Software License, Version 1.0. (See accompanying file 
  * LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
  *
  */
 
  /*
   *   LOCATION:    see http://www.boost.org for most recent version.
-  *   FILE         captures_test.cpp
+  *   FILE         credit_card_example.cpp
   *   VERSION      see <boost/version.hpp>
-  *   DESCRIPTION: Basic tests for additional captures information.
+  *   DESCRIPTION: Credit card number formatting code.
   */
 
+#include <string>
 #include <boost/regex.hpp>
-#include <boost/detail/lightweight_main.hpp>
-#include "../test_macros.hpp"
-#include <boost/array.hpp>
-#include <cstring>
 
-#ifdef BOOST_HAS_ICU
-#include <boost/regex/icu.hpp>
-#endif
-
-#define ARRAY_SIZE(x) (sizeof(x) / sizeof(x[0]))
-
-template <int N>
-int array_size(const char* (&p)[N])
+bool validate_card_format(const std::string& s)
 {
-   for(int i = 0; i < N; ++i)
-      if(p[i] == 0)
-         return i;
-   return N;
+   static const boost::regex e("(\\d{4}[- ]){3}\\d{4}");
+   return boost::regex_match(s, e);
 }
 
-std::wstring make_wstring(const char* p)
+const boost::regex e("\\A(\\d{3,4})[- ]?(\\d{4})[- ]?(\\d{4})[- ]?(\\d{4})\\z");
+const std::string machine_format("\\1\\2\\3\\4");
+const std::string human_format("\\1-\\2-\\3-\\4");
+
+std::string machine_readable_card_number(const std::string& s)
 {
-   return std::wstring(p, p + std::strlen(p));
+   return boost::regex_replace(s, e, machine_format, boost::match_default | boost::format_sed);
 }
 
-#ifdef __sgi
-template <class T>
-void test_captures(const std::string& regx, const std::string& text, const T& expected)
-#else
-template <class T>
-void test_captures(const std::string& regx, const std::string& text, T& expected)
-#endif
+std::string human_readable_card_number(const std::string& s)
 {
-   boost::regex e(regx);
-   boost::smatch what;
-   if(boost::regex_match(text, what, e, boost::match_extra))
-   {
-      unsigned i, j;
-#ifndef __sgi
-      // strange type deduction causes this test to fail on SGI:
-      BOOST_CHECK(what.size() == ARRAY_SIZE(expected));
-#endif
-      for(i = 0; i < what.size(); ++i)
-      {
-         BOOST_CHECK(what.captures(i).size() == array_size(expected[i]));
-         for(j = 0; j < what.captures(i).size(); ++j)
-         {
-            BOOST_CHECK(what.captures(i)[j] == expected[i][j]);
-         }
-      }
-   }
-
-   std::wstring wre(regx.begin(), regx.end());
-   std::wstring wtext(text.begin(), text.end());
-   boost::wregex we(wre);
-   boost::wsmatch wwhat;
-   if(boost::regex_match(wtext, wwhat, we, boost::match_extra))
-   {
-      unsigned i, j;
-#ifndef __sgi
-      // strange type deduction causes this test to fail on SGI:
-      BOOST_CHECK(wwhat.size() == ARRAY_SIZE(expected));
-#endif
-      for(i = 0; i < wwhat.size(); ++i)
-      {
-         BOOST_CHECK(wwhat.captures(i).size() == array_size(expected[i]));
-         for(j = 0; j < wwhat.captures(i).size(); ++j)
-         {
-            BOOST_CHECK(wwhat.captures(i)[j] == make_wstring(expected[i][j]));
-         }
-      }
-   }
-
-#ifdef BOOST_HAS_ICU
-   boost::u32regex ure = boost::make_u32regex(regx);
-   what = boost::smatch();
-   if(boost::u32regex_match(text, what, ure, boost::match_extra))
-   {
-      unsigned i, j;
-#ifndef __sgi
-      // strange type deduction causes this test to fail on SGI:
-      BOOST_CHECK(what.size() == ARRAY_SIZE(expected));
-#endif
-      for(i = 0; i < what.size(); ++i)
-      {
-         BOOST_CHECK(what.captures(i).size() == array_size(expected[i]));
-         for(j = 0; j < what.captures(i).size(); ++j)
-         {
-            BOOST_CHECK(what.captures(i)[j] == expected[i][j]);
-         }
-      }
-   }
-#endif
+   return boost::regex_replace(s, e, human_format, boost::match_default | boost::format_sed);
 }
 
-int cpp_main(int , char* [])
+#include <iostream>
+using namespace std;
+
+int main()
 {
-   typedef const char* pchar;
-   pchar e1[4][5] = 
+   string s[4] = { "0000111122223333", "0000 1111 2222 3333",
+                   "0000-1111-2222-3333", "000-1111-2222-3333", };
+   int i;
+   for(i = 0; i < 4; ++i)
    {
-      { "aBBcccDDDDDeeeeeeee", },
-      { "a", "BB", "ccc", "DDDDD", "eeeeeeee", },
-      { "a", "ccc", "eeeeeeee", },
-      { "BB", "DDDDD", },
-   };
-   test_captures("(([[:lower:]]+)|([[:upper:]]+))+", "aBBcccDDDDDeeeeeeee", e1);
-   pchar e2[4][2] = 
+      cout << "validate_card_format(\"" << s[i] << "\") returned " << validate_card_format(s[i]) << endl;
+   }
+   for(i = 0; i < 4; ++i)
    {
-      { "abd" },
-      { "b", "" },
-      { "" },
-   };
-   test_captures("a(b+|((c)*))+d", "abd", e2);
-   pchar e3[3][1] = 
+      cout << "machine_readable_card_number(\"" << s[i] << "\") returned " << machine_readable_card_number(s[i]) << endl;
+   }
+   for(i = 0; i < 4; ++i)
    {
-      { "abcbar" },
-      { "abc" },
-   };
-   test_captures("(.*)bar|(.*)bah", "abcbar", e3);
-   pchar e4[3][1] = 
-   {
-      { "abcbah" },
-      { 0, },
-      { "abc" },
-   };
-   test_captures("(.*)bar|(.*)bah", "abcbah", e4);
-   pchar e5[2][16] = 
-   {
-      { "now is the time for all good men to come to the aid of the party" },
-      { "now", "is", "the", "time", "for", "all", "good", "men", "to", "come", "to", "the", "aid", "of", "the", "party" },
-   };
-   test_captures("^(?:(\\w+)|(?>\\W+))*$", "now is the time for all good men to come to the aid of the party", e5);
-   pchar e6[2][16] = 
-   {
-      { "now is the time for all good men to come to the aid of the party" },
-      { "now", "is", "the", "time", "for", "all", "good", "men", "to", "come", "to", "the", "aid", "of", "the", "party" },
-   };
-   test_captures("^(?>(\\w+)\\W*)*$", "now is the time for all good men to come to the aid of the party", e6);
-   pchar e7[4][14] = 
-   {
-      { "now is the time for all good men to come to the aid of the party" },
-      { "now" },
-      { "is", "the", "time", "for", "all", "good", "men", "to", "come", "to", "the", "aid", "of", "the" },
-      { "party" },
-   };
-   test_captures("^(\\w+)\\W+(?>(\\w+)\\W+)*(\\w+)$", "now is the time for all good men to come to the aid of the party", e7);
-   pchar e8[5][9] = 
-   {
-      { "now is the time for all good men to come to the aid of the party" } ,
-      { "now" },
-      { "is", "for", "men", "to", "of" },
-      { "the", "time", "all", "good", "to", "come", "the", "aid", "the" },
-      { "party" },
-   };
-   test_captures("^(\\w+)\\W+(?>(\\w+)\\W+(?:(\\w+)\\W+){0,2})*(\\w+)$", "now is the time for all good men to come to the aid of the party", e8);
+      cout << "human_readable_card_number(\"" << s[i] << "\") returned " << human_readable_card_number(s[i]) << endl;
+   }
    return 0;
 }
+
+
+
 

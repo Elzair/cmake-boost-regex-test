@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.3)
 
 project(test_regex)
 
-add_subdirectory(libs2)
+add_subdirectory(libs)
 
 add_executable(test_regex test.cpp)
 

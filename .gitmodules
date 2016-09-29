@@ -1,0 +1,75 @@
+[submodule "libs/assert"]
+	path = libs/assert
+	url = https://github.com/elzair/assert.git
+[submodule "libs/concept_check"]
+	path = libs/concept_check
+	url = https://github.com/elzair/concept_check.git
+[submodule "libs/config"]
+	path = libs/config
+	url = https://github.com/elzair/config.git
+[submodule "libs/conversion"]
+	path = libs/conversion
+	url = https://github.com/elzair/conversion.git
+[submodule "libs/core"]
+	path = libs/core
+	url = https://github.com/elzair/core.git
+[submodule "libs/detail"]
+	path = libs/detail
+	url = https://github.com/elzair/detail.git
+[submodule "libs/function"]
+	path = libs/function
+	url = https://github.com/elzair/function.git
+[submodule "libs/function_types"]
+	path = libs/function_types
+	url = https://github.com/elzair/function_types.git
+[submodule "libs/functional"]
+	path = libs/functional
+	url = https://github.com/elzair/functional.git
+[submodule "libs/fusion"]
+	path = libs/fusion
+	url = https://github.com/elzair/fusion.git
+[submodule "libs/integer"]
+	path = libs/integer
+	url = https://github.com/elzair/integer.git
+[submodule "libs/iterator"]
+	path = libs/iterator
+	url = https://github.com/elzair/iterator.git
+[submodule "libs/mpl"]
+	path = libs/mpl
+	url = https://github.com/elzair/mpl.git
+[submodule "libs/optional"]
+	path = libs/optional
+	url = https://github.com/elzair/optional.git
+[submodule "libs/predef"]
+	path = libs/predef
+	url = https://github.com/elzair/predef.git
+[submodule "libs/preprocessor"]
+	path = libs/preprocessor
+	url = https://github.com/elzair/preprocessor.git
+[submodule "libs/smart_ptr"]
+	path = libs/smart_ptr
+	url = https://github.com/elzair/smart_ptr.git
+[submodule "libs/static_assert"]
+	path = libs/static_assert
+	url = https://github.com/elzair/static_assert.git
+[submodule "libs/throw_exception"]
+	path = libs/throw_exception
+	url = https://github.com/elzair/throw_exception.git
+[submodule "libs/tuple"]
+	path = libs/tuple
+	url = https://github.com/elzair/tuple.git
+[submodule "libs/type_index"]
+	path = libs/type_index
+	url = https://github.com/elzair/type_index.git
+[submodule "libs/type_traits"]
+	path = libs/type_traits
+	url = https://github.com/elzair/type_traits.git
+[submodule "libs/typeof"]
+	path = libs/typeof
+	url = https://github.com/elzair/typeof.git
+[submodule "libs/utility"]
+	path = libs/utility
+	url = https://github.com/elzair/utility.git
+[submodule "libs/regex"]
+	path = libs/regex
+	url = https://github.com/elzair/regex.git

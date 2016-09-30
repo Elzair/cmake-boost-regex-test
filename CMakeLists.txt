@@ -1,10 +1,18 @@
 cmake_minimum_required(VERSION 3.3)
 
+set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+
+option(BOOST_REGEX_USE_ICU "Enable support for ICU" OFF)
+
 project(test_regex)
 
 add_subdirectory(libs)
 
 add_executable(test_regex test.cpp)
+
+if(BOOST_REGEX_USE_ICU)
+  target_link_libraries(test_regex ICU::ICU)
+endif(BOOST_REGEX_USE_ICU)
 
 target_link_libraries(test_regex
   boost_assert

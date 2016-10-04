@@ -73,3 +73,6 @@
 [submodule "libs/regex"]
 	path = libs/regex
 	url = https://github.com/elzair/regex.git
+[submodule "libs/range"]
+	path = libs/range
+	url = https://github.com/elzair/range.git
